@@ -1,0 +1,6 @@
+node_modules
+nodemon.json
+.vscode
+angular/
+*.zip
+.DS_Store

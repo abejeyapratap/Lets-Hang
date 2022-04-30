@@ -1,0 +1,27 @@
+{
+  "name": "lets-hang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abejeyapratap/Lets-Hang.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abejeyapratap/Lets-Hang/issues"
+  },
+  "homepage": "https://github.com/abejeyapratap/Lets-Hang#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
