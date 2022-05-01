@@ -1,1 +1,178 @@
-<p>create works!</p>
+<div class="container">
+  <div class="py-3 text-center">
+    <h2>Create a Hangout</h2>
+    <p class="lead">
+      Fill in your hangout information and send to get processed for some magic!
+    </p>
+  </div>
+
+  <form
+    class="needs-validation"
+    novalidate
+    #f="ngForm"
+    (ngSubmit)="onSubmit(f)"
+  >
+    <!-- Basic Hangout info -->
+    <div>
+      <label for="datePick">
+        <h4 class="mb-3">Pick a date</h4>
+      </label>
+      <input
+        type="date"
+        id="datePick"
+        name="date"
+        class="m-3"
+        required
+        [(ngModel)]="date"
+      />
+    </div>
+
+    <div>
+      <label for="timePick">
+        <h4 class="mb-3">Pick a time</h4>
+      </label>
+      <input
+        type="time"
+        id="timePick"
+        name="time"
+        class="m-3"
+        value="17:00"
+        [(ngModel)]="time"
+        required
+      />
+    </div>
+
+    <div>
+      <label for="commutePick">
+        <h4 class="mb-3">Enter commute time (hours)</h4>
+      </label>
+      <input
+        type="number"
+        id="commutePick"
+        name="commute"
+        class="m-3"
+        [(ngModel)]="commute"
+      />
+    </div>
+
+    <!-- Line break -->
+    <hr class="mb-4" />
+
+    <!-- Friends info -->
+    <h4 class="mb-3">Enter friend 1</h4>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="emoji-1">Emoji</label>
+        <input
+          type="text"
+          class="form-control"
+          id="emoji-1"
+          name="emoji-1"
+          [(ngModel)]="friend1.emoji"
+          required
+        />
+        <!-- <div class="invalid-feedback">Valid first name is required.</div> -->
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address-1">Address</label>
+      <input
+        type="text"
+        class="form-control"
+        id="address-1"
+        name="address-1"
+        [(ngModel)]="friend1.address"
+        placeholder="1234 Main St"
+        required
+      />
+      <!-- <div class="invalid-feedback">Please enter your friend's emoji.</div> -->
+    </div>
+
+    <hr class="mb-4" />
+
+    <h4 class="mb-3">Enter friend 2</h4>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="emoji-2">Emoji</label>
+        <input
+          type="text"
+          class="form-control"
+          id="emoji-2"
+          name="emoji-2"
+          [(ngModel)]="friend2.emoji"
+          required
+        />
+        <!-- <div class="invalid-feedback">Valid first name is required.</div> -->
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address-2">Address</label>
+      <input
+        type="text"
+        class="form-control"
+        id="address-2"
+        name="address-2"
+        [(ngModel)]="friend2.address"
+        placeholder="1234 Main St"
+        required
+      />
+      <!-- <div class="invalid-feedback">Please enter your friend's emoji.</div> -->
+    </div>
+
+    <hr class="mb-4" />
+
+    <h4 class="mb-3">Enter friend 3</h4>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="emoji-3">Emoji</label>
+        <input
+          type="text"
+          class="form-control"
+          id="emoji-3"
+          name="emoji-3"
+          [(ngModel)]="friend3.emoji"
+          required
+        />
+        <!-- <div class="invalid-feedback">Valid first name is required.</div> -->
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="address-3">Address</label>
+      <input
+        type="text"
+        class="form-control"
+        id="address-3"
+        name="address-3"
+        [(ngModel)]="friend3.address"
+        placeholder="1234 Main St"
+        required
+      />
+      <!-- <div class="invalid-feedback">Please enter your friend's emoji.</div> -->
+    </div>
+
+    <hr class="mb-4" />
+    <div class="col text-center mb-5">
+      <button class="btn btn-primary btn-lg btn-block" type="submit" [disabled]="!f.valid">
+        Start Hangout
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- <div class="mb-3">
+      <label for="email"
+        >Email <span class="text-muted">(Optional)</span></label
+      >
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        placeholder="you@example.com"
+      />
+      <div class="invalid-feedback">
+        Please enter a valid email address for shipping updates.
+      </div>
+    </div> -->
