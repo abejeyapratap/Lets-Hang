@@ -1,9 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
-
+const fetch = require('node-fetch');
 const Hangout = require("../models/hangout");
+const { MongoClient } = require("mongodb");
 
+let uri = "mongodb+srv://root:"+process.env.MONGO_ATLAS_PW+"@cluster0.2pizy.mongodb.net/test";
+console.log(uri)
+const client = new MongoClient(uri);
 let apiKey = process.env.GOOGLE_API_KEY;
 let baseUrl = `https://maps.googleapis.com/maps/api/`;
 
@@ -18,6 +22,35 @@ const types = [
     "museum",
     "tourist_attraction",
 ];
+
+async function mongoRun(id, hangs) {
+    try {
+      // Connect the client to the server
+      await client.connect();
+      // Establish and verify connection
+      await client.db("root").command({ ping: 1 });
+      console.log("Connected successfully to server");
+
+      const hangouts = client.db("lets-hang").collection("hangouts");
+      console.log("ID:", id)
+      const result = await hangouts.updateOne(
+        { _id: `ObjectId(${id})`},
+        {
+          $set: {
+            spots: hangs
+          },
+        },
+        { upsert: true }
+      );
+      console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+      );
+
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await client.close();
+    }
+  }
 
 /**
  * Store user stuff in MongoDB
@@ -69,45 +102,37 @@ router.post("/create", (req, res) => {
  */
 router.get("/:id", (req, res) => {
     Hangout.findOne({ _id: req.params.id })
-        .then((hangoutDocument) => {
-            // google maps stuff
-            // 1. Convert street addresses to Lat/Long (3 addresses)
+        .then((doc) => {
             let latLongArr = [];
-            // console.log(hangoutDocument);
-            let addr = [
-                "647 Roberts Ave Glenside PA 19038",
-                "3141 Chestnut Street Philadelphia PA 19104",
-                "1913 Hamilton St Philadelphia PA 19130",
-            ];
+            doc.friends.forEach(async function(element) {
+                console.log(element["address"])
+                let temp = await streetAddressToLatLdocumentLastShot(element["address"]);
+                console.log("Temp:", temp)
+                await latLongArr.push(temp);
+                if (latLongArr.length == 3){
+                    console.log(latLongArr)
+                    midpointLatLong = await calculateCenterCoordinate(latLongArr);
+                    console.log("Midpoint", midpointLatLong)
+
+                // 3. Get hangout spots
+                    finalHangoutSpots = await getHangoutSpots(midpointLatLong);
+                    console.log("Final hangout spots", finalHangoutSpots)
+                 // console.log("step 3");
+
+                    mongoRun(req.params.id, finalHangoutSpots)
+                
+                }
 
 
-            for (let i = 0; i < hangoutDocument.friends.length; i++) {
-                console.log(hangoutDocument.friends[i].address);
-                let temp = streetAddressToLatLong(
-                    hangoutDocument.friends[i].address
-                );
-                latLongArr.push(temp);
-                // console.log(`friend a`);
-            }
-            console.log(latLongArr);
-            console.log("step 1");
+            })
 
-            // 2. Calculate center coordinate
-            midpointLatLong = calculateCenterCoordinate(latLongArr);
-            console.log("step 2");
 
-            // 3. Get hangout spots
-            finalHangoutSpots = getHangoutSpots(midpointLatLong);
-            console.log("step 3");
-
-            // 4. Add spots to db
-            console.log(finalHangoutSpots);
-            res.json({ message: "Hangout info fetched!" });
         })
         .catch((err) => {
             res.status(404).json({ message: "Hangout does not exist!" });
             console.log("Error with GETting Hangouts");
         });
+        return 0;
 });
 
 // Google Maps API Functions
@@ -128,25 +153,36 @@ function directionsMetrics(origin, destination, mode) {
 }
 
 //address is the street address as a string
-async function streetAddressToLatLong(address) {
-    spaceReplacedAddress = address.replace(" ", "%20");
-    axios(
-        baseUrl + `geocode/json?address=${spaceReplacedAddress}&key=${apiKey}`
-    ).then(function (response) {
-        //console.log(response.data.results[0].geometry.location);
-        //console.log(`Geocode recieved`);
-        //console.log(`Returning: lat as ${response.results}`);
-        //console.log(`Returning: long as ${response.results[0].geometry.location.lng}`);
-        return {
-            lat: response.data.results[0].geometry.location.lat,
-            lng: response.data.results[0].geometry.location.lng,
-        };
-    });
-    /* return {
-        lat: resp.data.results[0].geometry.location.lat,
-        lng: resp.data.results[0].geometry.location.lng,
-    }; */
+
+function streetAddressToLatLdocumentLastShot(address) { // driving
+    spaceReplacedAddress = address.replace(' ', '%20');
+    let url = baseUrl+ `geocode/json?address=${spaceReplacedAddress}&key=${apiKey}`;
+    let settings = { method: "Get" };
+    
+    return fetch(url, settings)
+        .then(res => res.json())
+        .then((jsonres) => {
+            //console.log(jsonres)
+            console.log(`Geocode recieved`);
+            console.log(jsonres["results"][0]["geometry"])
+            let lat = jsonres["results"][0]["geometry"]["location"]["lat"];
+            let lng = jsonres["results"][0]["geometry"]["location"]["lng"];
+            //let x = addToLatandLongs(lat, lng)
+            return {
+                "lat": lat,
+                "lng": lng,
+            };
+        });
+        
+    }
+latandlongs = []
+async function addToLatandLongs(lat, lng){
+
+    latandlongs.push(coords);
 }
+
+
+
 
 //arrayOfLatLong has array of JSON objects in the form of {lat:number, lng:number}
 function calculateCenterCoordinate(arrayOfLatLong) {
