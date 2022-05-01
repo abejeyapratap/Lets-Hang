@@ -7,6 +7,18 @@ const Hangout = require("../models/hangout");
 let apiKey = process.env.GOOGLE_API_KEY;
 let baseUrl = `https://maps.googleapis.com/maps/api/`;
 
+const types = [
+    "shopping_mall",
+    "zoo",
+    "amusement_park",
+    "aquarium",
+    "park",
+    "bowling_alley",
+    "cafe",
+    "museum",
+    "tourist_attraction",
+];
+
 /**
  * Store user stuff in MongoDB
  * Return user ID to Angular
@@ -56,17 +68,41 @@ router.post("/create", (req, res) => {
  * Google Maps API calls + data pre-processing
  */
 router.get("/:id", (req, res) => {
-    console.log(req.params.id);
     Hangout.findOne({ _id: req.params.id })
         .then((hangoutDocument) => {
-            console.log(hangoutDocument);
-            res.json({ message: "Hangout info fetched!" });
             // google maps stuff
+            // 1. Convert street addresses to Lat/Long (3 addresses)
+            let latLongArr = [];
+            // console.log(hangoutDocument);
+            let addr = [
+                "647 Roberts Ave Glenside PA 19038",
+                "3141 Chestnut Street Philadelphia PA 19104",
+                "1913 Hamilton St Philadelphia PA 19130",
+            ];
 
-            // 1. Convert street addresses to Lat/Long
+
+            for (let i = 0; i < hangoutDocument.friends.length; i++) {
+                console.log(hangoutDocument.friends[i].address);
+                let temp = streetAddressToLatLong(
+                    hangoutDocument.friends[i].address
+                );
+                latLongArr.push(temp);
+                // console.log(`friend a`);
+            }
+            console.log(latLongArr);
+            console.log("step 1");
+
             // 2. Calculate center coordinate
+            midpointLatLong = calculateCenterCoordinate(latLongArr);
+            console.log("step 2");
+
             // 3. Get hangout spots
-            // 4. 
+            finalHangoutSpots = getHangoutSpots(midpointLatLong);
+            console.log("step 3");
+
+            // 4. Add spots to db
+            console.log(finalHangoutSpots);
+            res.json({ message: "Hangout info fetched!" });
         })
         .catch((err) => {
             res.status(404).json({ message: "Hangout does not exist!" });
@@ -91,7 +127,8 @@ function directionsMetrics(origin, destination, mode) {
         });
 }
 
-function streetAddressToLatLong(address) {
+//address is the street address as a string
+async function streetAddressToLatLong(address) {
     spaceReplacedAddress = address.replace(" ", "%20");
     axios(
         baseUrl + `geocode/json?address=${spaceReplacedAddress}&key=${apiKey}`
@@ -105,12 +142,20 @@ function streetAddressToLatLong(address) {
             lng: response.data.results[0].geometry.location.lng,
         };
     });
+    /* return {
+        lat: resp.data.results[0].geometry.location.lat,
+        lng: resp.data.results[0].geometry.location.lng,
+    }; */
 }
 
+//arrayOfLatLong has array of JSON objects in the form of {lat:number, lng:number}
 function calculateCenterCoordinate(arrayOfLatLong) {
     let latSum = 0;
     let longSum = 0;
+    // console.log("center 1");
     for (let i = 0; i < arrayOfLatLong.length; i++) {
+        // console.log(`center i ${i}`);
+        //console.log(arrayOfLatLong[i]);
         latSum += arrayOfLatLong[i].lat;
         longSum += arrayOfLatLong[i].lng;
     }
@@ -120,39 +165,43 @@ function calculateCenterCoordinate(arrayOfLatLong) {
     };
 }
 
+//{lat:number, lng:number} for latLongAddress
 async function getHangoutSpots(latLongAddress) {
-    types = [
-        "shopping_mall",
-        "zoo",
-        "amusement_park",
-        "aquarium",
-        "park",
-        "bowling_alley",
-        "cafe",
-        "museum",
-        "tourist_attraction",
-    ];
     let hangoutOptions = [];
     for (let i = 0; i < types.length; i++) {
         const resp = await axios(
             baseUrl +
                 `place/nearbysearch/json?location=${latLongAddress.lat},${latLongAddress.lng}&radius=8000&key=${apiKey}&type=${types[i]}`
         );
-        /* .then(function (response) {
-            console.log(`Hangouts for ${types[i]}: ${response.data.results}`);
-            contole.log(type)
-            hangoutOptions.concat(response.data.results);
-            console.log(hangoutOptions.length);
-            console.log(hangoutOptions);
-        }); */
-        // console.log(resp.data.results[0]);
-        hangoutOptions.push(resp.data.results[0]);
+        if (resp.data.results[0]) {
+            hangoutOptions.push(resp.data.results[0]);
+        }
     }
 
-    // console.log("Hangout length");
-    console.log(hangoutOptions.length);
-    console.log(hangoutOptions);
-    return hangoutOptions;
+    filteredHangoutList = filterHangoutOptions(hangoutOptions);
+
+    return filteredHangoutList;
+}
+
+/**
+ * filter relevant fields
+ * ranking hangout options (default: )
+ */
+function filterHangoutOptions(hangoutList) {
+    let places = [];
+
+    hangoutList.forEach((element) => {
+        // console.log(element.name)
+        let hangoutPlace = {};
+        hangoutPlace.name = element.name;
+        hangoutPlace.rating = element.rating;
+        hangoutPlace.vicinity = element.vicinity;
+        hangoutPlace.lat = element.geometry.location.lat;
+        hangoutPlace.long = element.geometry.location.lng;
+        places.push(hangoutPlace);
+    });
+
+    return places;
 }
 
 module.exports = router;
