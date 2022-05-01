@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { HangoutsService } from '../hangouts.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class CreateComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private hangoutsService: HangoutsService
+    private hangoutsService: HangoutsService,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -37,6 +39,7 @@ export class CreateComponent implements OnInit {
 
     this.hangoutsService.createHangout(formData).subscribe((response) => {
       console.log(response);
+      this.router.navigateByUrl(`/hangout/${response.hangoutId}`);
     });
   }
 }

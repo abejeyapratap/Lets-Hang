@@ -8,10 +8,11 @@ import { AppComponent } from './app.component';
 import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
 import { HangoutComponent } from './hangout/hangout.component';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, CreateComponent, HangoutComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, GoogleMapsModule],
   providers: [],
   bootstrap: [AppComponent],
 })

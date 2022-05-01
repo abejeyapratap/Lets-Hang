@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HangoutsService } from '../hangouts.service';
+import { Hangout, HangoutsService } from '../hangouts.service';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'app-hangout',
@@ -10,6 +11,11 @@ import { HangoutsService } from '../hangouts.service';
 export class HangoutComponent implements OnInit {
   hangoutId: string;
   isLoading = false;
+  hangoutList: Hangout[];
+  // markerList: { position: { lat: number; lng: number } }[] = [];
+  markerList: google.maps.LatLngLiteral[] = [];
+  midpoint: { lat: number; lng: number };
+  mapOptions: google.maps.MapOptions;
 
   constructor(
     private router: Router,
@@ -29,8 +35,19 @@ export class HangoutComponent implements OnInit {
       this.hangoutsService
         .getHangoutInfoById(this.hangoutId)
         .subscribe((result) => {
-          this.isLoading = false;
           console.log(result);
+          this.isLoading = false;
+          this.hangoutList = result.hangoutSpots.sort((a,b) => b.rating - a.rating);
+
+          this.midpoint = result.midpoint;
+          this.mapOptions = {
+            center: this.midpoint,
+            zoom: 14,
+          };
+
+          result.hangoutSpots.forEach((hangout) => {
+            this.markerList.push({ lat: hangout.lat, lng: hangout.long });
+          });
         });
     });
   }

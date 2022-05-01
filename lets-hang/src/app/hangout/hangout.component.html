@@ -1,11 +1,39 @@
 <!-- Loading Spinner -->
 <div class="text-center" *ngIf="isLoading">
   <div class="spinner-border" role="status"></div>
-  <p class="lead">
-    Searching for Hangout Spots...
-  </p>
+  <p class="lead">Searching for Hangout Spots...</p>
 </div>
 
-<div class="py-2 text-center">
+<div class="py-2 text-center" *ngIf="!isLoading">
   <h2>Hangout Information</h2>
+</div>
+
+<div class="container" *ngIf="!isLoading">
+  <div class="row">
+    <div class="col">
+      <div class="card w-50 px-2 py-2" *ngFor="let hangout of hangoutList">
+        <div class="card-body">
+          <h5 class="card-title">{{ hangout.name }}</h5>
+          <p class="card-text">
+            {{ hangout.vicinity }}
+          </p>
+          <button type="button" class="btn btn-secondary btn-sm">
+            {{ hangout.rating }} stars
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="my-google-map" height="800px" width="1000px">
+        <google-map [options]="mapOptions">
+          <map-marker
+            *ngFor="let markerPosition of markerList"
+            [position]="markerPosition"
+          ></map-marker>
+        </google-map>
+        <button class="btn btn-primary btn-lg btn-block m-5">Summary</button>
+      </div>
+    </div>
+  </div>
+
 </div>
