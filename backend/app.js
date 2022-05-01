@@ -1,11 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const axios = require("axios"); //TODO remove
 let apiKey = process.env.GOOGLE_API_KEY; //TODO remove
 let baseUrl = `https://maps.googleapis.com/maps/api/`; //TODO remove
 
 const app = express();
+
+// Serve static files in angular/ directory
+app.use("/", express.static(path.join(__dirname, "angular")));
 
 app.use(express.json());
 
@@ -40,5 +44,10 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/hangout", hangoutRoutes); // forward requests to /api/hangout
+
+// Render Angular app for all requests NOT to routes defined above
+app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, "angular", "index.html"));
+});
 
 module.exports = app;
