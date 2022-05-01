@@ -7,6 +7,10 @@ const BACKEND_URL = 'http://localhost:3000/api/hangout';
   providedIn: 'root',
 })
 export class HangoutsService {
+  hangoutList: Hangout[] = [];
+  distanceList: Distance[] = [];
+  trainList: Distance[] = [];
+
   constructor(private http: HttpClient) {}
 
   createHangout(formData: any) {
@@ -17,9 +21,30 @@ export class HangoutsService {
   }
 
   getHangoutInfoById(hangoutId: string) {
-    return this.http.get<{ midpoint: {lat: number, lng: number}, hangoutSpots: Hangout[]; distanceList: number[] }>(
-      `${BACKEND_URL}/${hangoutId}`
-    );
+    return this.http.get<{
+      midpoint: { lat: number; lng: number };
+      hangoutSpots: Hangout[];
+      distanceList: Distance[];
+      trainDistance: Distance[];
+    }>(`${BACKEND_URL}/${hangoutId}`);
+  }
+
+  setHangoutInfo(
+    hangoutList: Hangout[],
+    distanceList: Distance[],
+    trainList: Distance[]
+  ) {
+    this.hangoutList = hangoutList;
+    this.distanceList = distanceList;
+    this.trainList = trainList;
+  }
+
+  fetchHangoutInfo() {
+    return {
+      hangouts: this.hangoutList,
+      distance: this.distanceList,
+      train: this.trainList,
+    };
   }
 }
 
@@ -29,4 +54,9 @@ export interface Hangout {
   vicinity: string;
   lat: number;
   long: number;
+}
+
+export interface Distance {
+  distance: string;
+  time: string;
 }

@@ -9,9 +9,10 @@ import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
 import { HangoutComponent } from './hangout/hangout.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, CreateComponent, HangoutComponent],
+  declarations: [AppComponent, HomeComponent, CreateComponent, HangoutComponent, SummaryComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule, GoogleMapsModule],
   providers: [],
   bootstrap: [AppComponent],

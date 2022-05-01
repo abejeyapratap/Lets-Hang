@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateComponent } from './create/create.component';
 import { HangoutComponent } from './hangout/hangout.component';
 import { HomeComponent } from './home/home.component';
+import { SummaryComponent } from './summary/summary.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'hangout/:hangoutId',
     component: HangoutComponent,
+  },
+  {
+    path: 'hangout/summary/:hangoutId',
+    component: SummaryComponent,
   },
 ];
 

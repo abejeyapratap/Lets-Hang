@@ -40,24 +40,8 @@ async function mongoRun(hangoutId, finalHangoutSpots) {
             { hangoutSpots: finalHangoutSpots },
             { strict: false, returnDocument: true }
         );
-
-        // console.log(updateRes);
-
-        /* const result = await hangouts.updateOne(
-            { _id: `ObjectId(${hangoutId})` },
-            {
-                $set: {
-                    spots: finalHangoutSpots,
-                },
-            },
-            { upsert: true }
-        );
-        console.log(
-            `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-        ); */
-    } finally {
-        // Ensures that the client will close when you finish/error
-        // await client.close();
+    } catch (err) {
+        console.log(e);
     }
 }
 
@@ -115,6 +99,7 @@ router.get("/:id", (req, res) => {
             let latLongArr = [];
             let finalHangoutSpots;
             let distanceForEachPerson = [];
+            let distanceForEachPersonTrain = [];
             let midpointLatLong;
             doc.friends.forEach(async function (element) {
                 // console.log(element["address"]);
@@ -129,8 +114,18 @@ router.get("/:id", (req, res) => {
                     "3717 Chestnut St, Philadelphia, PA 19104",
                     "driving"
                 );
-                await distanceForEachPerson.push(distance); 
-                if (latLongArr.length == 3 && distanceForEachPerson.length == 3) {
+                await distanceForEachPerson.push(distance);
+                let train = await directionsMetrics(
+                    element["address"],
+                    "3717 Chestnut St, Philadelphia, PA 19104",
+                    "train"
+                );
+                await distanceForEachPersonTrain.push(train);
+                if (
+                    latLongArr.length == 3 &&
+                    distanceForEachPerson.length == 3 &&
+                    distanceForEachPersonTrain.length == 3
+                ) {
                     //onsole.log(latLongArr);
                     //console.log(distanceForEachPerson);
                     midpointLatLong = await calculateCenterCoordinate(
@@ -150,6 +145,7 @@ router.get("/:id", (req, res) => {
                         midpoint: midpointLatLong,
                         hangoutSpots: finalHangoutSpots,
                         distanceList: distanceForEachPerson,
+                        trainDistance: distanceForEachPersonTrain,
                     });
 
                     mongoRun(req.params.id, finalHangoutSpots);
@@ -169,17 +165,27 @@ function directionsMetrics(origin, destination, mode) {
     // default is driving, but we can provide transit as well
     spaceReplacedAddress = origin.replace(" ", "%20");
     let settings = { method: "Get" };
+    let returnOutput = [];
     return axios
         .get(
             `https://maps.googleapis.com/maps/api/` +
-                `directions/json?origin=${spaceReplacedAddress}&destination=${destination}&key=${apiKey}`
-                //directions/json?origin=Adelaide,SA&destination=Adelaide,SA&key=AIzaSyAu28y0TTjcLEMngA53hpGzezs0KCEje8M
-                )
+                `directions/json?origin=${spaceReplacedAddress}&destination=${destination}&key=${apiKey}&mode=${mode}`
+        )
         .then(function (response) {
+            if (mode == "drive") {
+                time = "drive time";
+                distance = "drive distance";
+            } else {
+                time = "train time";
+                distance = "train distance";
+            }
             //console.log(response.routes)
             //console.log("distance Metrics" + response.data.routes[0].legs[0].distance.text); // returns distance in text, e.g. 15.3 mi
             // console.log(response.data.routes[0].legs[0].duration.text); // returns duration in seconds, e.g. 2131 for 36 mins
-            return response.data.routes[0].legs[0].distance.text;
+            return {
+                distance: response.data.routes[0].legs[0].distance.text,
+                time: response.data.routes[0].legs[0].duration.text,
+            };
         });
 }
 

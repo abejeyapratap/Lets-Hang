@@ -1,0 +1,64 @@
+<div class="py-2 text-center">
+  <h2>Hangout Summary</h2>
+</div>
+
+<div class="container">
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Drive Time</th>
+        <th scope="col">Drive Distance</th>
+        <th scope="col">Carbon Footprint</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dist of distanceList; let i = index">
+        <td>{{ dist.time }}</td>
+        <td>{{ dist.distance }}</td>
+        <td>{{ (coeff * carbonList[i]) / 25}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Train Time</th>
+        <th scope="col">Train Distance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let train of trainList">
+        <td>{{ train.time }}</td>
+        <td>{{ train.distance }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="text-center">
+  <h4>Support sustainability and unnecessary travel.</h4>
+  <p>
+    Let's Hang calculated the most geographically favorable locations for your
+    friend group meetup.
+  </p>
+  <p>
+    The average passenger vehicle emits about 404 grams of CO2 per mile (EPA).
+  </p>
+  <p>
+    By considering convenient transit options, you help to make Earth a more
+    inhabitable place.
+  </p>
+
+  <h2>Mission</h2>
+  <div class="container">
+    <p>
+      The mission of Let's Hang is simple and tri-fold. We seek to connect
+      friends, reduce personal emissions, and make the world a more sustainable
+      place through environmentally-focused tech.
+    </p>
+    <p>
+      We see opportunity in partnering with business leaders, transportation
+      authorities like SEPTA, and our local community to support these goals.
+    </p>
+  </div>
+</div>

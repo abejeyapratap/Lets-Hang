@@ -39,6 +39,8 @@ export class HangoutComponent implements OnInit {
           this.isLoading = false;
           this.hangoutList = result.hangoutSpots.sort((a,b) => b.rating - a.rating);
 
+          this.hangoutsService.setHangoutInfo(this.hangoutList, result.distanceList, result.trainDistance);
+
           this.midpoint = result.midpoint;
           this.mapOptions = {
             center: this.midpoint,

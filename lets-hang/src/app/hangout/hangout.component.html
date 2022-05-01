@@ -31,9 +31,14 @@
             [position]="markerPosition"
           ></map-marker>
         </google-map>
-        <button class="btn btn-primary btn-lg btn-block m-5">Summary</button>
+        <button
+          class="btn btn-primary btn-lg btn-block m-5"
+          [routerLink]="['/', 'hangout', 'summary', hangoutId]"
+        >
+          Hangout Summary
+        </button>
+        <p> Respective values are for each friend. </p>
       </div>
     </div>
   </div>
-
 </div>
