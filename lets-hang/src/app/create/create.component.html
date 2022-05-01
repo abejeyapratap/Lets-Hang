@@ -2,7 +2,8 @@
   <div class="py-3 text-center">
     <h2>Create a Hangout</h2>
     <p class="lead">
-      Fill in your hangout information and send to get processed for some magic!
+      Enter your hangout information and we'll tell you the best place to
+      hangout!
     </p>
   </div>
 
@@ -155,7 +156,11 @@
 
     <hr class="mb-4" />
     <div class="col text-center mb-5">
-      <button class="btn btn-primary btn-lg btn-block" type="submit" [disabled]="!f.valid">
+      <button
+        class="btn btn-primary btn-lg btn-block"
+        type="submit"
+        [disabled]="!f.valid"
+      >
         Start Hangout
       </button>
     </div>

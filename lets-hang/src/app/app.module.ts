@@ -7,9 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { CreateComponent } from './create/create.component';
 import { HomeComponent } from './home/home.component';
+import { HangoutComponent } from './hangout/hangout.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, CreateComponent],
+  declarations: [AppComponent, HomeComponent, CreateComponent, HangoutComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

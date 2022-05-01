@@ -24,7 +24,7 @@ export class CreateComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(form: NgForm) {
-    console.log(form.value);
+    // console.log(form.value);
 
     let formData = {
       date: this.date,

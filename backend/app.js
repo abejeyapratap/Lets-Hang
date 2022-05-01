@@ -1,8 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const axios = require("axios"); //TODO remove
+let apiKey = process.env.GOOGLE_API_KEY; //TODO remove
+let baseUrl = `https://maps.googleapis.com/maps/api/`; //TODO remove
+
 const app = express();
- 
+
+app.use(express.json());
+
+const hangoutRoutes = require("./routes/hangout");
+
 mongoose
     .connect(
         "mongodb+srv://root:" +
@@ -31,7 +39,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use("/api/documents", documentRoutes); // forward requests to /api/documents
-
+app.use("/api/hangout", hangoutRoutes); // forward requests to /api/hangout
 
 module.exports = app;
