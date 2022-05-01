@@ -1,7 +1,9 @@
 const http = require("http");
 const app = require("./backend/app");
 const debug = require("debug")("node-angular");
+const cors = require('cors');
 
+app.use(cors());
 // Ensure port is valid number
 const normalizePort = (val) => {
     let portNumber = parseInt(val, 10);
