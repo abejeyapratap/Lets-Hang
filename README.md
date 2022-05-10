@@ -1,6 +1,20 @@
 # Let's Hang!
 
-![image](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/921/565/datas/gallery.jpg)
+## Winner: Best Use of Google Cloud at IEEE DragonHacks 2022
+
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/921/565/datas/gallery.jpg" width="350" height="350" />
+
+## Site Demo
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/369/datas/gallery.jpg" width="550" height="400" />
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/371/datas/gallery.jpg" width="550" height="400" />
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/479/datas/gallery.jpg" width="550" height="400" />
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/478/datas/gallery.jpg" width="550" height="400" />
+
+## Built with
+**Frontend:** Angular and Bootstrap  
+**Backend**: Node and Express  
+**Database**: MongoDB  
+**APIs**: Google Maps (Places API, Geocoder API, and Directions API)
 
 ## Inspiration
 Have you ever wanted to plan something fun with your friends but always ran out of ideas? That's why we built "Let's Hang"! We saw inspiration with the simple web application when2meet, something we use all the time when coordinating group projects for classes. We understand that we all have busy schedules and it can be hard to put the effort in to coordinate and make it work. Let's Hang searches the web for fun places for students and young adults alike to hang out, including museums, cafes, bowling, and other attractions. Due to our unique location weighting process, our platform is able to reveal insights and suggest new locations that otherwise would not be obvious.
@@ -9,9 +23,6 @@ Our team wanted to build a project that would bring people together in an enviro
 
 ## What it does
 Our application consists of a landing page where the user is greeted with a friendly, easy to navigate interface to start their search for a hangout. Our application asks the user to pick a date, time, and maximum commute time to a "hangout". The application takes three addresses and then the user is able to start the hangout search. From here, the user is presented with the top picks of locations in a column on the left side of the screen and a map of the locations on the right. The user is able to view a summary of the hangout from here, including time, distance, and carbon footprint for all participants. The application works to intelligently discover places of interest based on geolocation factors and is powered by several Google services to ensure high reliability of results. This application is geared towards students and young adults and especially commuter students that may live far away from each other but still want to meet up outside of class.
-
-## How we built it
-Our web app uses Angular and Bootstrap for the front end, Node and Express for the backend, and MongoDB for the database. The backend also communicates with the multiple Google Maps-related APIs from Google Cloud including Places API, Geocoder API, and Directions API. We developed this project entirely during the hackathon with a devoted schedule.
 
 ## Challenges we ran into
 We found that asynchronous code and chaining async functions for API calls was hard to get right and took a significant amount of time to debug than we had allotted for the project. Also, this was the first hackathon for two of us and the time limit was an adjustment.
