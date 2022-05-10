@@ -2,7 +2,7 @@
 
 ## Winner: Best Use of Google Cloud at IEEE DragonHacks 2022
 
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/921/565/datas/gallery.jpg" width="350" height="350" />
+<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/921/565/datas/gallery.jpg" width="450" height="450" />
 
 ## Site Demo
 <img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/369/datas/gallery.jpg" width="550" height="400" />
