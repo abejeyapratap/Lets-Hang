@@ -2,13 +2,13 @@
 
 ## Winner: Best Use of Google Cloud at IEEE DragonHacks 2022
 
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/921/565/datas/gallery.jpg" width="450" height="450" />
+<img src="img/logo.png" width="450" height="450" />
 
 ## Site Demo
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/369/datas/gallery.jpg" width="550" height="400" />
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/371/datas/gallery.jpg" width="550" height="400" />
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/922/479/datas/gallery.jpg" width="550" height="400" />
-<img src="https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/001/927/677/datas/gallery.jpg" width="550" height="400" />
+<img src="img/welcome.png" width="550" height="400" />
+<img src="img/create.png" width="550" height="400" />
+<img src="img/info-map.png" width="550" height="400" />
+<img src="img/summary.png" width="550" height="400" />
 
 ## Built with
 **Frontend:** Angular and Bootstrap  
